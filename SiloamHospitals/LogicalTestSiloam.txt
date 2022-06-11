@@ -1,0 +1,55 @@
+Logical Test - Hanif
+
+1.
+select "Type", sum(amount) as total_amount, count(1) as total_employee, q1.address_exist
+from (select p."type" as "Type", sum(p.amount) as amount, case when a.address is null then 'FALSE' else 'TRUE' end as address_exist
+from "Employee" e 
+inner join "Payroll" p on e.employee_id = p.employee_id 
+left join "Address" a on e.employee_id = a.employee_id 
+group by p."type", e.employee_id, a.address) q1
+group by q1."Type", q1.address_exist
+order by q1."Type" ;
+
+2. 
+select e.employee_id, e."name", r."name" as religion_name, case when q2.address is null then '-' else q2.address end as Address,
+case when q3.amount is null then '0' else q3.amount end as amount
+from "Employee" e 
+left join "Religion" r on e.religion_id = r.religion_id 
+left join (select q1.employee_id, q1.seq, a2.address 
+from (select employee_id, min(seq) as seq
+from "Address" a
+group by a.employee_id) q1
+left join "Address" a2 on q1.employee_id = a2.employee_id and q1.seq = a2.seq) q2 on e.employee_id = q2.employee_id
+left join (select e.employee_id, sum(p.amount) as amount
+from "Employee" e 
+inner join "Payroll" p on e.employee_id = p.employee_id 
+group by e.employee_id) q3 on e.employee_id = q3.employee_id
+order by e.employee_id ;
+
+3. Saya menggunakan JavaScript
+function printStar(count) {
+    for (let i = 0; i < count; i++) {
+        let bintang = '';
+        for (let j = 0; j <= i; j++) {
+            bintang += '*'
+        }
+        console.log(bintang)
+    }
+}
+printStar(5);
+
+4. Saya menggunakan JavaScript
+function printAngka(angka) {
+    const angkaStr = angka.toString();
+    const angkaLength = angkaStr.length;
+
+    for (let i = 0; i < angkaLength; i++) {
+        let angkaPrint = '';
+        angkaPrint += angkaStr[i];
+        for (let j = 1; j < angkaLength - i; j++) {
+            angkaPrint += '0';
+        }
+        console.log(angkaPrint);
+    }
+}
+printAngka(1345679);
